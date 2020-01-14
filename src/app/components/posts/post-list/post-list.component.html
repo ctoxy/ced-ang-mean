@@ -1,17 +1,14 @@
-<mat-accordion>
-  <mat-expansion-panel>
+<mat-accordion Multi=true *ngIf="posts.length > 1">
+  <mat-expansion-panel *ngFor="let post of posts">
     <mat-expansion-panel-header>
       <mat-panel-title>
-        Personal data
+        {{post.title}}
       </mat-panel-title>
 
     </mat-expansion-panel-header>
     <mat-panel-description>
-      Currently I am
+      {{post.name}}
     </mat-panel-description>
-
-
-
   </mat-expansion-panel>
-
 </mat-accordion>
+<p class="text-info mat-body-1" *ngIf="posts.length <= 0">no posts for now</p>
