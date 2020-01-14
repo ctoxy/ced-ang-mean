@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { PostCreateComponent } from './components/posts/post-create/post-create.component';
-
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -16,7 +16,8 @@ import { PostCreateComponent } from './components/posts/post-create/post-create.
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    FormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
