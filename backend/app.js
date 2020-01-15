@@ -2,6 +2,8 @@
 const express = require('express');
 /*permet de recuperer le contenu des requetes http via node et express*/
 const bodyParser = require("body-parser");
+/*Appel du model de Mongoose Post*/
+const Post = require('./models/post');
 /*creation de l application sous express*/
 const app = express();
 
@@ -25,7 +27,10 @@ app.use((req, res, next) => {
 
 /*REQUETE POST FOR POST*/
 app.post("/api/posts", (req, res, next) => {
-  const post = req.body;
+  const post = new Post({
+    title: req.body.title,
+    content: req.body.content
+  });
   console.log(post);
   res.status(201).json({
     message: 'Post added successfully'
