@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { Post } from '../../../Models/post.model';
 
 @Component({
   selector: 'app-post-list',
@@ -12,7 +13,7 @@ export class PostListComponent implements OnInit {
     {title: 'third title', content: 'this is third text associed with title'}
   ];*/
   /*recupére les posts issue de post create via event emitter */
-  @Input() posts = [];
+  @Input() posts: Post[] = [];
   constructor() { }
 
   ngOnInit() {

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Post } from './Models/post.model';
 
 @Component({
   selector: 'app-root',
@@ -7,7 +8,7 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'ced-ang-mean';
-  storedPost = [];
+  storedPost: Post[] = [];
   onPostAdded(post) {
     this.storedPost.push(post);
   }
