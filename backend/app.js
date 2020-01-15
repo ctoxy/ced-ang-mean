@@ -2,11 +2,24 @@
 const express = require('express');
 /*permet de recuperer le contenu des requetes http via node et express*/
 const bodyParser = require("body-parser");
+/*Appel middleware mongoose*/
+const mongoose = require('mongoose');
 /*Appel du model de Mongoose Post*/
 const Post = require('./models/post');
 /*creation de l application sous express*/
 const app = express();
 
+
+/*connection a mongoose*/
+mongoose.connect("mongodb+srv://cedric:KjteQRi0@angular-qxjse.mongodb.net/test?retryWrites=true&w=majority")
+  .then(() => {
+    console.log('Connected to Database success');
+
+  })
+  .catch(() => {
+    console.log('connection fail!!!');
+
+  });
 /*utilisation de body parser pour parser l information json issue des requetes http*/
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
