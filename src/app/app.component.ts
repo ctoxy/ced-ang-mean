@@ -7,4 +7,8 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'ced-ang-mean';
+  storedPost = [];
+  onPostAdded(post) {
+    this.storedPost.push(post);
+  }
 }
