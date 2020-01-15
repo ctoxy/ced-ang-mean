@@ -1,8 +1,11 @@
+/*apple du serveur express*/
 const app = require("./backend/app");
+/*evite les erreurs de lancement du scripts packagejson*/
 const debug = require("debug")("node-angular");
 /*http natif de nodejs*/
 const http = require("http");
 
+/*fonction qui valide que le port recu est le bon*/
 const normalizePort = val => {
   var port = parseInt(val, 10);
 
@@ -18,7 +21,7 @@ const normalizePort = val => {
 
   return false;
 };
-
+/*fonction qui trace le type d erreur pour le serveur */
 const onError = error => {
   if (error.syscall !== "listen") {
     throw error;
@@ -37,7 +40,7 @@ const onError = error => {
       throw error;
   }
 };
-
+/*fonction qui ecoute les requetes entrantes*/
 const onListening = () => {
   const addr = server.address();
   const bind = typeof port === "string" ? "pipe " + port : "port " + port;
