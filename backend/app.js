@@ -51,7 +51,7 @@ app.post("/api/posts", (req, res, next) => {
   });
 });
 
-/*REQUETE GET FOR POST attetion sous mongo _id soit map soit modif du model cote front*/
+/*REQUETE GET FOR POST attention sous mongo _id soit map soit modif du model cote front*/
 app.get("/api/posts", (req, res, next) => {
   Post.find()
     .then(documents => {
