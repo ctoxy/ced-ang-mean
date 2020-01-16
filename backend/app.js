@@ -4,8 +4,9 @@ const express = require('express');
 const bodyParser = require("body-parser");
 /*Appel middleware mongoose*/
 const mongoose = require('mongoose');
-/*Appel du model de Mongoose Post*/
-const Post = require('./models/post');
+/*Appel des routes posts*/
+const postsRoutes = require("./routes/posts");
+
 /*creation de l application sous express*/
 const app = express();
 
@@ -33,48 +34,11 @@ app.use((req, res, next) => {
   );
   res.setHeader(
     "Access-Control-Allow-Methods",
-    "GET, POST, PATCH, DELETE, OPTIONS"
+    "GET, POST, PATCH, PUT, DELETE, OPTIONS"
   );
   next();
 });
 
-/*REQUETE POST FOR POST*/
-app.post("/api/posts", (req, res, next) => {
-  const post = new Post({
-    title: req.body.title,
-    content: req.body.content
-  });
-  post.save().then(createdPost => {
-    res.status(201).json({
-      message: 'Post added successfully',
-      postId: createdPost._id
-    });
-  });
-});
-
-/*REQUETE GET FOR POST attention sous mongo _id soit map soit modif du model cote front*/
-app.get("/api/posts", (req, res, next) => {
-  Post.find()
-    .then(documents => {
-      console.log(documents);
-      res.status(200).json({
-        message: "Posts fetched successfully!",
-        posts: documents
-      });
-    });
-
-});
-
-/*REQUETE delete FOR POST via le parametre dynamique id*/
-app.delete("/api/posts/:id", (req, res, next) => {
-  Post.deleteOne({ _id: req.params.id })
-    .then(result => {
-      console.log(result);
-      res.status(200).json({
-        message: "Posts was deleted!"
-      });
-    })
-});
-
+app.use("/api/posts", postsRoutes);
 /*export du module app*/
 module.exports = app;

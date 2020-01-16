@@ -16,13 +16,16 @@ export class PostListComponent implements OnInit, OnDestroy {
   ];*/
   /*recupére les posts issue de post create via event emitter */
   posts: Post[] = [];
+  isLoading = false;
   private postsSub: Subscription;
   constructor(public postsService: PostsService) { }
 
   ngOnInit() {
+    this.isLoading = true;
     this.postsService.getPosts();
     this.postsService.getPostUpdatedListener()
       .subscribe((posts: Post[]) => {
+        this.isLoading = false;
         this.posts = posts;
       });
   }
@@ -31,7 +34,11 @@ export class PostListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.postsSub.unsubscribe();
+    if (this.postsSub) {
+
+      this.postsSub.unsubscribe();
+
+    }
   }
 
 
