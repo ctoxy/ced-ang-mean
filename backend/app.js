@@ -10,8 +10,8 @@ const Post = require('./models/post');
 const app = express();
 
 
-/*connection a mongoose*/
-mongoose.connect("mongodb+srv://cedric:KjteQRi0@angular-qxjse.mongodb.net/test?retryWrites=true&w=majority")
+/*connection a mongoose NOM DE LA COLLECTION DBcedmean a la fin*/
+mongoose.connect("mongodb+srv://cedric:KjteQRi0@angular-qxjse.mongodb.net/DBcedmean?retryWrites=true&w=majority")
   .then(() => {
     console.log('Connected to Database success');
 
@@ -44,30 +44,24 @@ app.post("/api/posts", (req, res, next) => {
     title: req.body.title,
     content: req.body.content
   });
+  post.save();
   console.log(post);
   res.status(201).json({
     message: 'Post added successfully'
   });
 });
 
-/*REQUETE GET FOR POST*/
+/*REQUETE GET FOR POST attetion sous mongo _id soit map soit modif du model cote front*/
 app.get("/api/posts", (req, res, next) => {
-  const posts = [
-    {
-      id: "fadf12421l",
-      title: "First server-side post",
-      content: "This is coming from the server"
-    },
-    {
-      id: "ksajflaj132",
-      title: "Second server-side post",
-      content: "This is coming from the server!"
-    }
-  ];
-  res.status(200).json({
-    message: "Posts fetched successfully!",
-    posts: posts
-  });
+  Post.find()
+    .then(documents => {
+      console.log(documents);
+      res.status(200).json({
+        message: "Posts fetched successfully!",
+        posts: documents
+      });
+    });
+
 });
 /*export du module app*/
 module.exports = app;
