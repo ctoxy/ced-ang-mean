@@ -51,6 +51,9 @@ export class PostsService {
     this.httpClient.delete<{message: string}>('http://localhost:3000/api/posts/' + postId)
       .subscribe(() => {
         console.log('Deleted post from the front with the id :' + postId );
+        const updatedPosts = this.posts.filter(post => post.id !== postId);
+        this.posts = updatedPosts;
+        this.postsUpdated.next([...this.posts]);
       });
   }
 
