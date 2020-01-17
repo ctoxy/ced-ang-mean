@@ -4,7 +4,7 @@ const express = require('express');
 const bodyParser = require("body-parser");
 /*Appel middleware mongoose*/
 const mongoose = require('mongoose');
-/*Appel des routes posts*/
+/*Appel de la route d'accés a api posts*/
 const postsRoutes = require("./routes/posts");
 
 /*creation de l application sous express*/
@@ -39,6 +39,7 @@ app.use((req, res, next) => {
   next();
 });
 
+/* on renseigne la route associé pour ne pas retranscrire dans la routes/posts.js */
 app.use("/api/posts", postsRoutes);
 /*export du module app*/
 module.exports = app;

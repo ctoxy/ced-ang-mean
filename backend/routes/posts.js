@@ -2,7 +2,7 @@
 const express = require("express");
 /*Appel du model de Mongoose Post*/
 const Post = require("../models/post");
-
+/*using express router in the backend*/
 const router = express.Router();
 
 /*REQUETE POST FOR POST*/
