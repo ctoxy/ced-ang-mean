@@ -6,7 +6,8 @@ const bodyParser = require("body-parser");
 const mongoose = require('mongoose');
 /*Appel de la route d'accés a api posts*/
 const postsRoutes = require("./routes/posts");
-
+/* permet la construction de chemin static pour les images */
+const path = require("path");
 /*creation de l application sous express*/
 const app = express();
 
@@ -24,6 +25,7 @@ mongoose.connect("mongodb+srv://cedric:KjteQRi0@angular-qxjse.mongodb.net/DBcedm
 /*utilisation de body parser pour parser l information json issue des requetes http*/
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use("/images", express.static(path.join("backend/images")));
 
 /*Cross Origin Ressource Sharing CORS to allow request between client and server on diffirent port*/
 app.use((req, res, next) => {

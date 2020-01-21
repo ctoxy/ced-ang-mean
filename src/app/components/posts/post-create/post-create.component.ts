@@ -3,6 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { PostsService } from '../../../services/posts/posts.service';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Post } from '../../../Models/post.model';
+import { mimeType } from './mime-type.validator';
 
 
 @Component({
@@ -23,6 +24,9 @@ export class PostCreateComponent implements OnInit {
   private postId: string;
   /*Creation du reactive form form group*/
   form: FormGroup;
+  /*Creation rendu image selectionner*/
+  imagePreview: string;
+
 
 
   constructor(public postsService: PostsService, public route: ActivatedRoute) { }
@@ -34,6 +38,10 @@ export class PostCreateComponent implements OnInit {
         validators: [Validators.required, Validators.minLength(3)]
       }),
       'content': new FormControl(null, { validators: [Validators.required] }),
+      'image': new FormControl(null, {
+        validators: [Validators.required],
+        asyncValidators: [mimeType]
+      })
     });
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
       /*on verifie si l url passé contient postId issue du routing en mode edit si oui*/
@@ -47,11 +55,13 @@ export class PostCreateComponent implements OnInit {
             id: postData._id,
             title: postData.title,
             content: postData.content,
-
+            imagePath: postData.imagePath
           };
+
           this.form.setValue({
             title: this.post.title,
             content: this.post.content,
+            image: this.post.imagePath
 
           });
         });
@@ -61,18 +71,34 @@ export class PostCreateComponent implements OnInit {
       }
     });
   }
+
+  onImagePicked(event: Event) {
+    const file = (event.target as HTMLInputElement).files[0];
+    this.form.patchValue({ image: file });
+    this.form.get('image').updateValueAndValidity();
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.imagePreview = reader.result as string;
+    };
+    reader.readAsDataURL(file);
+  }
   onSavePost() {
     if (this.form.invalid) {
       return;
     }
     this.isLoading = true;
     if (this.mode === 'create') {
-      this.postsService.addPost(this.form.value.title, this.form.value.content);
+      this.postsService.addPost(
+        this.form.value.title,
+        this.form.value.content,
+        this.form.value.image
+      );
     } else {
       this.postsService.updatePost(
         this.postId,
         this.form.value.title,
-        this.form.value.content
+        this.form.value.content,
+        this.form.value.image
       );
     }
     this.form.reset();
