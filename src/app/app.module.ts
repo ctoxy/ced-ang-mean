@@ -19,12 +19,16 @@ import { PostListComponent } from './components/posts/post-list/post-list.compon
 import { AppRoutingModule } from './app-routing.module';
 
 import { from } from 'rxjs';
+import { LoginComponent } from './components/auth/login/login.component';
+import { SignupComponent } from './components/auth/signup/signup.component';
 @NgModule({
   declarations: [
     AppComponent,
     PostCreateComponent,
     HeaderComponent,
     PostListComponent,
+    LoginComponent,
+    SignupComponent,
 
 
   ],
