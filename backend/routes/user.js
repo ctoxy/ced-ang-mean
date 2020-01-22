@@ -2,6 +2,8 @@
 const express = require("express");
 /*permet d'utiliser bcryp pour hascher les password*/
 const bcrypt = require("bcryptjs");
+/*permet d'utiliser jsonwebtoken pour la creation du jeton pour l utilisation de la session*/
+const jwt = require("jsonwebtoken");
 
 /*using express router in the backend*/
 const router = express.Router();
@@ -28,6 +30,40 @@ router.post("/signup", (req, res, next) => {
           });
         });
     });
+});
+
+/* route post qui compare l email et le password d'un utilisateur pour verifier si il est connecté ou pas */
+router.post("/login", (req, res, next) => {
+  User.findOne({email: req.body.email})
+    .then(user => {
+      /*user not exist in the database*/
+      if (!user) {
+        return res.status(401).json({
+          message:'auth failed'
+        });
+      }
+      /*apres avoir verifier l'email existe on compare le has du password si il est identique */
+      return bcrypt.compare(req.body.password, user.password);
+    })
+    /*user exist but password not good*/
+    .then(result => {
+      if (!result) {
+        return res.status(401).json({
+          message:'auth failed'
+        });
+      }
+      /*creation par le serveur du jeton et clé de hashage a changer*/
+      const token = jwt.sign(
+        {email: user.email, userId: user._id},
+         'secret_this_should_be_longer',
+         { expiresIn:'1h'}
+        );
+    })
+    .catch(err => {
+      return res.status(401).json({
+        message:'auth failed'
+      });
+    })
 });
 
 module.exports = router;
