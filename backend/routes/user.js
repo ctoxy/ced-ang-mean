@@ -1,7 +1,7 @@
 /*permet d'utiliser express pour le serveur*/
 const express = require("express");
 /*permet d'utiliser bcryp pour hascher les password*/
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 
 /*using express router in the backend*/
 const router = express.Router();
