@@ -4,8 +4,9 @@ const express = require('express');
 const bodyParser = require("body-parser");
 /*Appel middleware mongoose*/
 const mongoose = require('mongoose');
-/*Appel de la route d'accés a api posts*/
+/*Appel de la route d'accés a api posts / user*/
 const postsRoutes = require("./routes/posts");
+const userRoutes = require("./routes/user");
 /* permet la construction de chemin static pour les images */
 const path = require("path");
 /*creation de l application sous express*/
@@ -43,5 +44,6 @@ app.use((req, res, next) => {
 
 /* on renseigne la route associé pour ne pas retranscrire dans la routes/posts.js */
 app.use("/api/posts", postsRoutes);
+app.use("/api/user", userRoutes);
 /*export du module app*/
 module.exports = app;
