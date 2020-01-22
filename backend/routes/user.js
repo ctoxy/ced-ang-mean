@@ -52,12 +52,17 @@ router.post("/login", (req, res, next) => {
           message:'auth failed'
         });
       }
+      /*user exist and good password donc creatin du token*/
       /*creation par le serveur du jeton et clé de hashage a changer*/
       const token = jwt.sign(
         {email: user.email, userId: user._id},
          'secret_this_should_be_longer',
          { expiresIn:'1h'}
-        );
+      );
+      res.status(200).json({
+        token: token
+      })
+
     })
     .catch(err => {
       return res.status(401).json({
