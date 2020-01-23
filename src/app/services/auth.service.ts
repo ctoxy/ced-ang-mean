@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthData } from '../Models/auth-data.model';
+import { Subject } from 'rxjs';
 
 
 @Injectable({
@@ -9,6 +10,8 @@ import { AuthData } from '../Models/auth-data.model';
 export class AuthService {
   /*token pour accés ou pas a une route*/
   private token: string;
+  /*SUBJECT permet de transmettre a un composant le status de l'authentification ex header*/
+  private authStatusListener = new Subject<boolean>();
 
   constructor(private httpClient: HttpClient) {
 
@@ -17,6 +20,10 @@ export class AuthService {
   /*token etant privé methode permettant de l'utiliser dans le post service */
   getToken() {
     return this.token;
+  }
+  /*status vrai ou faux si on est ou pas authentifier*/
+  getauthStatusListener() {
+    return this.authStatusListener.asObservable();
   }
 
   createUser(email: string, password: string) {
@@ -33,6 +40,7 @@ export class AuthService {
       .subscribe(response => {
         const token = response.token;
         this.token = token;
+        this.authStatusListener.next(true);
       });
   }
 }
