@@ -7,9 +7,16 @@ import { AuthData } from '../Models/auth-data.model';
   providedIn: 'root'
 })
 export class AuthService {
+  /*token pour accés ou pas a une route*/
+  private token: string;
 
   constructor(private httpClient: HttpClient) {
 
+  }
+
+  /*token etant privé methode permettant de l'utiliser dans le post service */
+  getToken() {
+    return this.token;
   }
 
   createUser(email: string, password: string) {
@@ -22,9 +29,10 @@ export class AuthService {
 
   login(email: string, password: string) {
     const authData: AuthData = {email: email, password: password};
-    this.httpClient.post('http://localhost:3000/api/user/login', authData)
+    this.httpClient.post<{token: string}>('http://localhost:3000/api/user/login', authData)
       .subscribe(response => {
-        console.log(response);
+        const token = response.token;
+        this.token = token;
       });
   }
 }

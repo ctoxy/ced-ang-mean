@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -12,7 +13,11 @@ export class PostsService {
   private posts: Post[] = [];
   /*use of ...spread posts need subject from rxjs*/
   private postsUpdated = new Subject<{ posts: Post[]; postCount: number }>();
-  constructor(private httpClient: HttpClient, private router: Router) {}
+  constructor(
+    private httpClient: HttpClient,
+    private router: Router,
+
+  ) {}
   /*voir requete get dans app.js*/
   getPosts(postsPerPage: number, currentPage: number) {
     const queryParams = `?pagesize=${postsPerPage}&page=${currentPage}`;
