@@ -4,6 +4,9 @@ const express = require("express");
 const Post = require("../models/post");
 /*Appel du middleware multer pour upload de fichier*/
 const multer = require("multer");
+/*Appel du middleware check-auth verifiant la validiter du token pour les routes protégé*/
+const checkAuth = require("../middleware/check-auth");
+
 /* type de fichier accepter */
 const MIME_TYPE_MAP = {
   "image/png": "png",
@@ -33,9 +36,10 @@ const storage = multer.diskStorage({
 /*using express router in the backend*/
 const router = express.Router();
 
-/*REQUETE POST FOR POST*/
+/*REQUETE POST FOR POST route protéger par le token via checkAuth*/
 router.post(
   "",
+  checkAuth,
   multer({ storage: storage }).single("image"),
   (req, res, next) => {
     const url = req.protocol + "://" + req.get("host");
@@ -55,9 +59,10 @@ router.post(
     });
   }
 );
-
+/* Put mise a  jour d'un poste route protéger par le token via checkAuth*/
 router.put(
   "/:id",
+  checkAuth,
   multer({ storage: storage }).single("image"),
   (req, res, next) => {
     let imagePath = req.body.imagePath;
@@ -114,8 +119,8 @@ router.get("/:id", (req, res, next) => {
   });
 });
 
-/*REQUETE delete FOR POST via le parametre dynamique id*/
-router.delete("/:id", (req, res, next) => {
+/*REQUETE delete FOR POST via le parametre dynamique id route protéger par le token via checkAuth*/
+router.delete("/:id",checkAuth, (req, res, next) => {
   Post.deleteOne({ _id: req.params.id }).then(result => {
     console.log(result);
     res.status(200).json({ message: "Post deleted!" });
