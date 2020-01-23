@@ -34,6 +34,7 @@ router.post("/signup", (req, res, next) => {
 
 /* route post qui compare l email et le password d'un utilisateur pour verifier si il est connecté ou pas */
 router.post("/login", (req, res, next) => {
+  let fetchedUser;
   User.findOne({email: req.body.email})
     .then(user => {
       /*user not exist in the database*/
@@ -42,6 +43,7 @@ router.post("/login", (req, res, next) => {
           message:'auth failed'
         });
       }
+      fetchedUser = user;
       /*apres avoir verifier l'email existe on compare le has du password si il est identique */
       return bcrypt.compare(req.body.password, user.password);
     })
@@ -55,7 +57,7 @@ router.post("/login", (req, res, next) => {
       /*user exist and good password donc creatin du token*/
       /*creation par le serveur du jeton et clé de hashage a changer*/
       const token = jwt.sign(
-        {email: user.email, userId: user._id},
+        {email: fetchedUser.email, userId: fetchedUser._id},
          'secret_this_should_be_longer',
          { expiresIn:'1h'}
       );
