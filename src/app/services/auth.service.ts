@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { AuthData } from '../Models/auth-data.model';
 import { Subject } from 'rxjs';
 import { Router } from '@angular/router';
+import { clearTimeout } from 'timers';
+import { expressionType } from '@angular/compiler/src/output/output_ast';
 
 
 @Injectable({
@@ -13,6 +15,8 @@ export class AuthService {
   isAuthenticated = false;
   /*token pour accés ou pas a une route*/
   private token: string;
+  /*tokenTimer issue du back pour une raz lors du logout*/
+  private tokenTimer: any;
   /*SUBJECT permet de transmettre a un composant le status de l'authentification ex header*/
   private authStatusListener = new Subject<boolean>();
 
@@ -43,11 +47,16 @@ export class AuthService {
 
   login(email: string, password: string) {
     const authData: AuthData = {email: email, password: password};
-    this.httpClient.post<{token: string}>('http://localhost:3000/api/user/login', authData)
+    this.httpClient.post<{token: string, expiresIn: number}>('http://localhost:3000/api/user/login', authData)
       .subscribe(response => {
         const token = response.token;
         this.token = token;
         if (token) {
+          /* expiration du token backend expiredIn mise sur 3600 on fait *1000 pour une heure*/
+          const expirationInDuration = response.expiresIn;
+          this.tokenTimer = setTimeout(() => {
+            this.logout();
+          }, expirationInDuration *1000 );
           this.isAuthenticated = true;
           this.authStatusListener.next(true);
           this.router.navigate(['/']);
@@ -59,6 +68,8 @@ export class AuthService {
     this.token = null;
     this.isAuthenticated = false;
     this.authStatusListener.next(false);
+    clearTimeout(this.tokenTimer);
     this.router.navigate(['/']);
+
   }
 }
