@@ -8,6 +8,8 @@ import { Subject } from 'rxjs';
   providedIn: 'root'
 })
 export class AuthService {
+  /* etat par defaut d'un user  */
+  isAuthenticated = false;
   /*token pour accés ou pas a une route*/
   private token: string;
   /*SUBJECT permet de transmettre a un composant le status de l'authentification ex header*/
@@ -21,7 +23,11 @@ export class AuthService {
   getToken() {
     return this.token;
   }
-  /*status vrai ou faux si on est ou pas authentifier*/
+  /*status vrai ou faux si on est ou pas authentifier apres le login*/
+  getIsAuth() {
+    return this.isAuthenticated;
+  }
+  /*status vrai ou faux si on est ou pas authentifier de maniere générale*/
   getauthStatusListener() {
     return this.authStatusListener.asObservable();
   }
@@ -40,7 +46,11 @@ export class AuthService {
       .subscribe(response => {
         const token = response.token;
         this.token = token;
-        this.authStatusListener.next(true);
+        if (token) {
+          this.isAuthenticated = true;
+          this.authStatusListener.next(true);
+        }
+
       });
   }
 }
