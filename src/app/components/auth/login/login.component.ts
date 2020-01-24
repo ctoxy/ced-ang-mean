@@ -8,7 +8,7 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-  isLoading: false;
+  isLoading = false;
   constructor(public authService: AuthService) { }
 
   ngOnInit() {
@@ -18,6 +18,7 @@ export class LoginComponent implements OnInit {
     if (form.invalid) {
       return;
     }
+    this.isLoading = true;
     this.authService.login(form.value.email, form.value.password);
 
   }
