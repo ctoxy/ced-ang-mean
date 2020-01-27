@@ -8,6 +8,6 @@ module.exports = (req, res, next) => {
     req.userData = {eamil: decodedToken.email, userId: decodedToken.userId};
     next();
   } catch (error) {
-    res.status(401).json({ message: "Auth failed! not authentified user" });
+    res.status(401).json({ message: "Auth failed! you are not authentified user" });
   }
 };

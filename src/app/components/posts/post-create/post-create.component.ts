@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { PostsService } from '../../../services/posts/posts.service';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Post } from '../../../Models/post.model';
 import { mimeType } from './mime-type.validator';
+import { Subscription } from 'rxjs';
+import { AuthService } from 'src/app/services/auth.service';
 
 
 @Component({
@@ -11,7 +13,7 @@ import { mimeType } from './mime-type.validator';
   templateUrl: './post-create.component.html',
   styleUrls: ['./post-create.component.scss']
 })
-export class PostCreateComponent implements OnInit {
+export class PostCreateComponent implements OnInit, OnDestroy {
   enteredTitle = '';
   enteredContent = '';
   /*recuperation de l object post issue du model */
@@ -26,12 +28,18 @@ export class PostCreateComponent implements OnInit {
   form: FormGroup;
   /*Creation rendu image selectionner*/
   imagePreview: string;
+  private authStatusSub: Subscription;
 
 
 
-  constructor(public postsService: PostsService, public route: ActivatedRoute) { }
+  constructor(public postsService: PostsService, public route: ActivatedRoute, private authService: AuthService) { }
   /*le composant post create sert pour edit et creation de fait dans le ng on init on valide le chemin*/
   ngOnInit() {
+    this.authStatusSub = this.authService.getauthStatusListener().subscribe(
+      authStatus => {
+        this.isLoading = false;
+      }
+    );
     /*initialisation du formulaire reactive */
     this.form = new FormGroup({
       'title': new FormControl(null, {
@@ -103,5 +111,9 @@ export class PostCreateComponent implements OnInit {
       );
     }
     this.form.reset();
+  }
+
+  ngOnDestroy () {
+    this.authStatusSub.unsubscribe();
   }
 }
