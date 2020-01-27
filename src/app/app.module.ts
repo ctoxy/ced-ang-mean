@@ -20,6 +20,8 @@ import { LoginComponent } from './components/auth/login/login.component';
 import { SignupComponent } from './components/auth/signup/signup.component';
 
 import { from } from 'rxjs';
+import { ErrorComponent } from './components/error/error.component';
+import { ErrorInterceptor } from './Interceptors/error-interceptor';
 
 
 @NgModule({
@@ -30,6 +32,7 @@ import { from } from 'rxjs';
     PostListComponent,
     LoginComponent,
     SignupComponent,
+    ErrorComponent,
 
 
   ],
@@ -42,9 +45,11 @@ import { from } from 'rxjs';
     MaterialModule,
     HttpClientModule
   ],
-  providers: [{
-    provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true
-  }],
-  bootstrap: [AppComponent]
+  providers: [
+    {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
+    {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
+  ],
+  bootstrap: [AppComponent],
+  entryComponents: [ErrorComponent]
 })
 export class AppModule { }
