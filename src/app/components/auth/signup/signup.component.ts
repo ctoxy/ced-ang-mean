@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
 import { Subscription } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-signup',
@@ -13,7 +14,7 @@ export class SignupComponent implements OnInit, OnDestroy {
   isLoading = false;
   /* souscription au status authstatuslistener si oui ou non on est authentifier  */
   private authListenerSignUpSubs: Subscription;
-  constructor(public authService: AuthService) { }
+  constructor(public authService: AuthService, private router: Router) { }
 
   ngOnInit() {
     this.authListenerSignUpSubs = this.authService.getauthStatusListener().subscribe(
@@ -29,6 +30,7 @@ export class SignupComponent implements OnInit, OnDestroy {
     }
     this.isLoading = true;
     this.authService.createUser(form.value.email, form.value.password);
+    this.router.navigate(['/']);
 
   }
   ngOnDestroy() {
